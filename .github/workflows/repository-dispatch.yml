@@ -25,7 +25,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-            
+
+      - run: |
+          ls -la
+          cat ./.github/template/env-repository-dispatch.json
+
       - name: Repository dispatch
         run: |
           DISPATCH_SHA=$(echo ${GITHUB_SHA})
