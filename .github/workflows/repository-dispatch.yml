@@ -1,0 +1,37 @@
+name: Repository dispatch
+
+on:
+  workflow_call:
+    inputs:
+      REPOSITORY:
+        required: true
+        type: string
+      EVENT_TYPE:
+        required: true
+        type: string
+      SHA:
+        required: false
+        type: string
+        default: ""
+    secrets:
+      PAT:
+        required: true
+
+jobs:
+  repository-dispatch:
+    name: Repository dispatch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+            
+      - name: Repository dispatch
+        run: |
+          DISPATCH_SHA=$(echo ${GITHUB_SHA})
+          DISPATCH_BODY=$(jq '.event_type |= "${{ inputs.EVENT_TYPE }}" | .client_payload.github_sha |= "'${{ inputs.SHA }}'"' ./.github/template/env-repository-dispatch.json)
+          curl -v --location --request POST 'https://api.github.com/repos/'${{ inputs.REPOSITORY }}'/dispatches' \
+            --header 'Authorization: Bearer ${{ secrets.PAT }}' \
+            --header 'accept: application/vnd.github.v3+json' \
+            --header 'Content-Type: application/json' \
+            --data-raw "$DISPATCH_BODY"
