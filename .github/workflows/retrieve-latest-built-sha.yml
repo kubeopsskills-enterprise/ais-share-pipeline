@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      sha: ${{ steps.retriver.outputs.sha }}
+      output1: ${{ steps.retriver.outputs.sha }}
 
     steps:
       - name: Checkout repository
