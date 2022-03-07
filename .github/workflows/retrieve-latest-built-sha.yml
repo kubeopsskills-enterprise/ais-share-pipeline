@@ -3,12 +3,9 @@ name: Retrieve latest built sha
 on:
   workflow_call:
     outputs:
-      firstword:
-        description: "The first output string"
+      sha:
+        description: "Github SHA of latest build"
         value: ${{ jobs.repository-dispatch.outputs.output1 }}
-      secondword:
-        description: "The second output string"
-        value: ${{ jobs.repository-dispatch.outputs.output2 }}
 
 jobs:
   repository-dispatch:
@@ -16,28 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      output1: ${{ steps.step1.outputs.firstword }}
-      output2: ${{ steps.step2.outputs.secondword }}
+      output1: ${{ steps.retriver.outputs.sha }}
+
     steps:
-      - id: step1
-        run: echo "::set-output name=firstword::hello"
-      - id: step2
-        run: echo "::set-output name=secondword::world"
-
-    # outputs:
-    #   output1: ${{ steps.retriver.outputs.sha }}
-
-    # steps:
-    #   - name: Checkout repository
-    #     uses: actions/checkout@v3
-    #     with:
-    #       ref: 'main'
-    #   - name: Retrieve latest artifact name
-    #     id: retriver
-    #     run: |
-    #       ARTIFACT_NAME=$(cat latest-build-artifact)
-    #       echo $ARTIFACT_NAME
-    #       echo "::set-output name=sha::asdasdasdasdasdsa"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: 'main'
+      - name: Retrieve latest artifact name
+        id: retriver
+        run: |
+          ARTIFACT_NAME=$(cat latest-build-artifact)
+          echo $ARTIFACT_NAME
+          echo "::set-output name=sha::asdasdasdasdasdsa"
 
 
       
