@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       sha:
-        description: "The first output string"
+        description: "GitHub SHA of latest build"
         value: ${{ jobs.repository-dispatch.outputs.output1 }}
 
 jobs:
@@ -24,7 +24,6 @@ jobs:
         id: retriver
         run: |
           ARTIFACT_NAME=$(cat latest-build-artifact)
-          echo $ARTIFACT_NAME
           echo "::set-output name=sha::"$ARTIFACT_NAME
 
 
