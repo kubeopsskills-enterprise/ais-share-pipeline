@@ -5,10 +5,10 @@ on:
     outputs:
       firstword:
         description: "The first output string"
-        value: ${{ jobs.example_job.outputs.output1 }}
+        value: ${{ jobs.repository-dispatch.outputs.output1 }}
       secondword:
         description: "The second output string"
-        value: ${{ jobs.example_job.outputs.output2 }}
+        value: ${{ jobs.repository-dispatch.outputs.output2 }}
 
 jobs:
   repository-dispatch:
