@@ -21,7 +21,7 @@ jobs:
         run: |
           ARTIFACT_NAME=$(cat latest-build-artifact)
           echo $ARTIFACT_NAME
-          echo "::set-output name=sha::"$ARTIFACT_NAME
+          echo "::set-output name=sha::asdasdasdasdasdsa"
 
 
       
