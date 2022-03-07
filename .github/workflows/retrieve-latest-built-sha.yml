@@ -13,19 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      output1: ${{ steps.retriver.outputs.sha }}
+      output1: ${{ steps.retriver.outputs.firstname }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           ref: 'main'
-      - name: Retrieve latest artifact name
-        id: retriver
-        run: |
-          ARTIFACT_NAME=$(cat latest-build-artifact)
-          echo $ARTIFACT_NAME
-          echo "::set-output name=sha::asdasdasdasdasdsa"
+      - id: retriver
+        run: echo "::set-output name=firstname::"$(cat latest-build-artifact)
 
 
       
