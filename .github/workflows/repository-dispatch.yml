@@ -24,11 +24,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - run: |
-          ls -la
-          cat ./.github/template/env-repository-dispatch.json
+        uses: actions/checkout@v3
+        with:
+          repository: 'kubeopsskills-enterprise/ais-share-pipeline'
 
       - name: Repository dispatch
         run: |
