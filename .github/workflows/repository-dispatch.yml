@@ -30,8 +30,8 @@ jobs:
 
       - name: Repository dispatch
         run: |
-          DISPATCH_SHA=$(echo ${GITHUB_SHA})
           DISPATCH_BODY=$(jq '.event_type |= "${{ inputs.EVENT_TYPE }}" | .client_payload.github_sha |= "'${{ inputs.SHA }}'"' ./.github/template/env-repository-dispatch.json)
+          echo $DISPATCH_BODY
           curl -v --location --request POST 'https://api.github.com/repos/'${{ inputs.REPOSITORY }}'/dispatches' \
             --header 'Authorization: Bearer ${{ secrets.PAT }}' \
             --header 'accept: application/vnd.github.v3+json' \
