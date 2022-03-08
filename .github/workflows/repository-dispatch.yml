@@ -18,7 +18,7 @@ on:
         required: true
 
 jobs:
-  repository-dispatch:
+  repository_dispatch:
     name: Repository dispatch
     runs-on: ubuntu-latest
 

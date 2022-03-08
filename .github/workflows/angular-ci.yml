@@ -11,7 +11,7 @@ on:
         required: true
 
 jobs:
-  unit-tests:
+  unit_tests:
     name: Unit tests
     runs-on: ubuntu-latest
 
@@ -65,7 +65,7 @@ jobs:
 
   build:
     name: Build
-    needs: [unit-tests, codeql]
+    needs: [unit_tests, codeql]
     runs-on: ubuntu-latest
     
     steps:
