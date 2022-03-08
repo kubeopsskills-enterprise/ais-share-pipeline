@@ -67,9 +67,12 @@ jobs:
     name: Build
     needs: [unit_tests, codeql]
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: 'develop'
 
       - uses: actions/setup-node@v2
         with:
