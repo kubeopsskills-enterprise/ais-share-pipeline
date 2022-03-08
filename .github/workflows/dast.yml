@@ -1,0 +1,30 @@
+name: Repository dispatch
+
+on:
+  workflow_call:
+    inputs:
+      TARGET_URL:
+        required: true
+        type: string
+    secrets:
+      TOKEN:
+        required: true
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-20.04
+    name: Scan the web application with DAST
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.3.0
+        with:
+          token: ${{ secrets.TOKEN }}
+          docker_name: 'owasp/zap2docker-stable'
+          target: ${{ inputs.TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          fail_action: true
