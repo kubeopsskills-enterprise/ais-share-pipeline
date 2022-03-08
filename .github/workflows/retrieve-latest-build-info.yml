@@ -1,0 +1,44 @@
+name: Retrieve latest built sha
+
+on:
+  workflow_call:
+    inputs:
+      reference:
+        required: false
+        type: string
+        default: 'main'
+    outputs:
+      artifact_name:
+        description: "Artifact name of latest build"
+        value: ${{ jobs.repository_dispatch.outputs.output1 }}
+      sha:
+        description: "GitHub SHA of latest build"
+        value: ${{ jobs.repository_dispatch.outputs.output2 }}
+
+jobs:
+  repository_dispatch:
+    name: Repository dispatch
+    runs-on: ubuntu-latest
+
+    outputs:
+      output1: ${{ steps.artifact_name.outputs.artifact_name }}
+      output2: ${{ steps.sha.outputs.sha }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.reference }}
+      - name: Retrieve latest artifact name
+        id: artifact_name
+        run: |
+          ARTIFACT_NAME=$(cat latest-build-artifact)
+          echo "::set-output name=artifact_name::"$ARTIFACT_NAME
+      - name: Extract GitHub SHA
+        id: sha
+        run: |
+          ARTIFACT_NAME=$(cat latest-build-artifact)
+          SHA=$(echo $ARTIFACT_NAME | awk 'match($0,/artifact-([a-z0-9]*).zip/,a) {print a[1]}')
+          echo "::set-output name=sha::"$SHA
+
+      
