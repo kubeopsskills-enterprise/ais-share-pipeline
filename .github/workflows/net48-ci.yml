@@ -1,0 +1,98 @@
+name: Share Angular.io Develop CI
+
+on:
+  workflow_call:
+    inputs:
+      APP_NAME:
+        required: true
+        type: string
+    secrets:
+      STORAGE_ACCOUNT_CONNECTION_STRING:
+        required: true
+
+jobs:
+  unit_tests:
+    name: Unit tests
+    runs-on: windows-2019
+
+    steps:
+      - name: Setup MSBuild path
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Restore NuGet packages
+        run: nuget restore
+
+      - name: Publish to folder
+        run: msbuild .\UnitTestProject1\UnitTestProject1.csproj /nologo /verbosity:m
+
+      - run: dir .\UnitTestProject1\bin\Release
+      
+  # codeql:
+  #   name: CodeQL
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     actions: read
+  #     contents: read
+  #     security-events: write
+
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       language: [ 'javascript' ]
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v3
+
+  #   - name: Initialize CodeQL
+  #     uses: github/codeql-action/init@v1
+  #     with:
+  #       languages: ${{ matrix.language }}
+
+  #   - name: Autobuild
+  #     uses: github/codeql-action/autobuild@v1
+
+  #   - name: Perform CodeQL Analysis
+  #     uses: github/codeql-action/analyze@v1
+
+  # build:
+  #   name: Build
+  #   needs: [unit_tests, codeql]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name != 'pull_request'
+    
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: 'develop'
+
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '16'
+  #         cache: 'npm'
+  #         cache-dependency-path: ./package-lock.json
+
+  #     - name: Install dependencies
+  #       run: npm install
+
+  #     - name: Build
+  #       run: npm run build
+
+  #     - name: Upload artifact for deployment job
+  #       run: |
+  #         zip artifact-${GITHUB_SHA}.zip -r ./dist/${{ env.APP_NAME }}
+  #         rm -rf ./dist/${{ env.APP_NAME }}
+  #         az storage blob upload -c build -n artifact-${GITHUB_SHA}.zip -f ${GITHUB_WORKSPACE}/artifact-${GITHUB_SHA}.zip --connection-string "${{ secrets.STORAGE_ACCOUNT_CONNECTION_STRING }}"
+  #         rm artifact-${GITHUB_SHA}.zip
+
+  #     - name: Save artifact name to develop branch
+  #       run: |
+  #         echo artifact-${GITHUB_SHA}.zip > latest-build-artifact
+  #         git config user.name github-actions
+  #         git config user.email github-actions@github.com
+  #         git add .
+  #         git commit -m "save latest artifact build name on Develop workflow [skip ci]"
+  #         git push
