@@ -32,7 +32,8 @@ jobs:
 
       - run: dir .\UnitTestProject1\bin\Release
 
-      - run: dir C:\hostedtoolcache\windows\
+      - run: C:\ProgramData\Chocolatey\bin\vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Workload.ManagedDesktop Microsoft.VisualStudio.Workload.Web -requiresAny -property installationPath
+
 
   # codeql:
   #   name: CodeQL
