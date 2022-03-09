@@ -35,8 +35,10 @@ jobs:
       - run: |
           $path = C:\ProgramData\Chocolatey\bin\vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Workload.ManagedDesktop Microsoft.VisualStudio.Workload.Web -requiresAny -property installationPath
           $path = join-path $path 'Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe'
-          echo $path
-          $path .\UnitTestProject1\bin\Release\UnitTestProject1.dll
+          $env:Path += ';'+$path
+          vstest.console.exe
+
+#$path .\UnitTestProject1\bin\Release\UnitTestProject1.dll
   # codeql:
   #   name: CodeQL
   #   runs-on: ubuntu-latest
