@@ -24,6 +24,18 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.0.5
 
+      - uses: actions/cache@v2
+        with:
+          path: |
+            %userprofile%\.nuget\packages
+            %localappdata%\NuGet\v3-cache
+            %temp%\NuGetScratch
+            ${{ github.workspace }}\packages
+            %localappdata%\NuGet\plugins-cache
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.config') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Restore NuGet packages
         run: nuget restore
 
@@ -34,7 +46,7 @@ jobs:
 
       - run: |
           $path = C:\ProgramData\Chocolatey\bin\vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Workload.ManagedDesktop Microsoft.VisualStudio.Workload.Web -requiresAny -property installationPath
-          $path = join-path $path 'Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe'
+          $path = join-path $path 'Common7\IDE\CommonExtensions\Microsoft\TestWindow\'
           echo $env:Path
           $env:Path += ';'+$path
           echo $env:Path
