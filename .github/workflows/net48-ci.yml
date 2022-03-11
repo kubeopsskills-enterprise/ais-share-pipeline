@@ -52,7 +52,7 @@ jobs:
           echo $env:Path
           vstest.console.exe
 
-#$path .\UnitTestProject1\bin\Release\UnitTestProject1.dll
+
   # codeql:
   #   name: CodeQL
   #   runs-on: ubuntu-latest

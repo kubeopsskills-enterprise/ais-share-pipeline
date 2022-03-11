@@ -16,8 +16,8 @@ on:
         value: ${{ jobs.repository_dispatch.outputs.output2 }}
 
 jobs:
-  repository_dispatch:
-    name: Repository dispatch
+  retrieve_latest_built_sha:
+    name: Retrieve latest built sha
     runs-on: ubuntu-latest
 
     outputs:
